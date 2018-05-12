@@ -2,12 +2,11 @@
  'use strict';
     angular.module('app')
     .controller('feedCtrl',function($scope,feedService,$location){
-      	$scope.myBackgroundUrl={'background-image':'url(https://image.tmdb.org/t/p/w600_and_h900_bestv2/baby-driver-poster.jpg)'};
         $scope.Movies=[];
         $scope.rates=[];
       	$scope.comments=[];
         $scope.comment=''
-        $scope.videoLink= {'link':'https://www.youtube.com/watch?v=t2ByLmLnYJ8'}
+
       	feedService.getMovies().then(function(movies){
       		
       		$scope.Movies=movies;

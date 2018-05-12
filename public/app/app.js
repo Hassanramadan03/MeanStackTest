@@ -3,8 +3,7 @@
 // angular.module('app', ["auth0","angular-storage","angular-jwt","ngMaterial","ngRoute"])
 angular.module('app', ['satellizer',"ngRoute"])
 .config( function( $routeProvider,$authProvider, $locationProvider) {
-     console.log(localStorage.getItem('currentUser'));
-    
+      
     var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
     
         var deferred = $q.defer();

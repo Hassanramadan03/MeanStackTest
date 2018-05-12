@@ -2,8 +2,12 @@ const Commentss = require('../../models/comment');
 const Movie = require('../../models/movie');
 const Rate = require('../../models/rating');
 const http = require('http');
-const fs = require('fs');
+const path = require('path');
 
+const fs = require('fs');
+var request = require('request');
+const ytdl = require('ytdl-core');
+const exec = require('child-process-promise').exec;
 module.exports = {
     addMovie,
     addComment,
@@ -13,7 +17,8 @@ module.exports = {
 
 }
  
- 
+ const directoryPath = path.resolve(__dirname, '../..');
+const location = directoryPath + '/static/';
 
  
  
@@ -61,8 +66,7 @@ function addRate(rateObj){
                 if (_rateCreated) 
                 resolve({'message':'Rate Successfully Created ',rate:_rateCreated})
             }
-
-
+ 
               
             } catch (error) {
                 reject(error)
@@ -96,18 +100,16 @@ function addComment(commentObj){
 function addMovie(_movie){
     return new Promise(async (resolve, reject) => {
        try {
-             
+              
             const new_movie=await Movie.findOne({id:_movie.id});
             if(new_movie)resolve('Already Existed')
             else {
                  const movie=new Movie(_movie)
                  const savedMovie=await movie.save();
                  console.log(new_movie)
-                 var http = require('http');
-                 var file = fs.createWriteStream("file.jpg");
-                 var request = http.get(`https://www.youtube.com/embed/${new_movie.key}`, function(response) {
-                    response.pipe(file);
-                 });
+                await ytdl(`http://www.youtube.com/watch?v=${new_movie.key}`)
+                         .pipe(fs.createWriteStream(`video${_movie.id}.avi`));
+                await exec(`ffmpeg -i`+location+` ${new_movie.key}input.avi -vcodec msmpeg4v2 `+location+`${new_movie.key}output.avi`)
                  if (savedMovie)resolve(savedMovie)
             }
 
@@ -117,3 +119,6 @@ function addMovie(_movie){
             }
         })
     }
+
+
+ 

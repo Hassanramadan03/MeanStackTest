@@ -16,7 +16,7 @@
             getComments:getComments,
             getRates:getRates,
         };
-         
+        
         function getRates() {
          return  $http.get(apiUrl+`getRates?id=${currentUser}`).
                 then(function (response) {
@@ -63,7 +63,7 @@
                 });
         }
         function getMovies() {
-                return $http.get( `https://api.themoviedb.org/3/discover/movie?api_key=2be52bc734f6969769485aeb5f7f54bd&primary_release_date.gte=2017-5-12&primary_release_date.lte=2017-5-12`)
+                return $http.get( `https://api.themoviedb.org/3/discover/movie?api_key=2be52bc734f6969769485aeb5f7f54bd&primary_release_date.gte=2017-3-12&primary_release_date.lte=2018-4-12`)
                     .then(getMoviesComplete)
                     .catch(getMoviesFailed);
              }

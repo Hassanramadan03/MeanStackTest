@@ -4,7 +4,9 @@
    }
 </style>
 <div class="container">
-   <div ng-repeat='i in Movies'   class="movie-card">
+  <div ng-repeat='i in Movies'>
+   <div    class="movie-card">
+      
       <div class="movie-header manOfSteel" ng-style="readyStyleObject(Movies[$index].poster_path)">
          <div class="header-icon-container">
             <a ng-click='getVideoLink(Movies[$index].id)' href="" data-toggle="modal"
@@ -16,7 +18,7 @@
       <!--movie-header-->
       <div class="movie-content">
          <div class="movie-content-header">
-            <a href="/movie?id={{i.id}}">
+            <a data-toggle="modal" data-target="#x">
                <h3 class="movie-title">{{i.title}}</h3>
                <h1 class="movie-title pull-right">{{drawRating(Movies[$index].id)}}%</h1>
             </a>
@@ -55,6 +57,7 @@
          </div>
       </div>
    </div>
+</div>
    <!--movie-content-->
 </div>
 <!--movie-card-->
