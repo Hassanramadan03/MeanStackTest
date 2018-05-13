@@ -36,7 +36,7 @@
                 });
         }
         function addMovie(argument) {
-            $http.post(apiUrl+`add?id=${currentUser}`,argument).
+            $http.post(apiUrl+`add`,argument).
                 then(function (response) {
                   console.log(response)
                 }).

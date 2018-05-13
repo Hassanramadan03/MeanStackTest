@@ -3,7 +3,7 @@ const Movie = require('../../models/movie');
 const Rate = require('../../models/rating');
 const http = require('http');
 const path = require('path');
-
+const ffmpeg =  require('fluent-ffmpeg');
 const fs = require('fs');
 var request = require('request');
 const ytdl = require('ytdl-core');
@@ -101,20 +101,26 @@ function addMovie(_movie){
     return new Promise(async (resolve, reject) => {
        try {
               
-            const new_movie=await Movie.findOne({id:_movie.id});
-            if(new_movie)resolve('Already Existed')
+            const movies=await Movie.find({id:_movie.id});
+            
+            if(false){
+                  console.log(movies)
+                resolve('Already Existed')
+              
+            }
             else {
                  const movie=new Movie(_movie)
                  const savedMovie=await movie.save();
-                 console.log(new_movie)
-                await ytdl(`http://www.youtube.com/watch?v=${new_movie.key}`)
-                         .pipe(fs.createWriteStream(`video${_movie.id}.avi`));
-                await exec(`ffmpeg -i`+location+` ${new_movie.key}input.avi -vcodec msmpeg4v2 `+location+`${new_movie.key}output.avi`)
-                 if (savedMovie)resolve(savedMovie)
-            }
-
-              
-            } catch (error) {
+                 console.log(`http://www.youtube.com/watch?v=${savedMovie.key}`)
+                 const downloaded= ytdl('http://www.youtube.com/watch?v='+savedMovie.key)
+                      .pipe(fs.createWriteStream(`${location}video${savedMovie.id}.avi`));
+                if ( downloaded) {
+                   const encod=await ffmpeg(location+'input.avi').videoCodec('libx264');
+                    if(encod)
+                        resolve('Successfully downloaded and encoded')
+                }    
+            }}
+     catch (error) {
                 reject(error)
             }
         })

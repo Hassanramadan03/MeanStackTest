@@ -12,7 +12,6 @@ module.exports = {
     
 async function addMovie(req, res) {
     try {
-        console.log(req.body)
         const getmovies = await movie_service.addMovie(req.body);
         renderResponseUtil.sendResponse(req, res, getmovies)
     } catch (error) {
@@ -30,7 +29,6 @@ async function addComment(req, res) {
     }
 }
 async function addRate(req, res) {
-    console.log(req.body)
     try {
         const rate = await movie_service.addRate(req.body);
         renderResponseUtil.sendResponse(req, res, rate)
