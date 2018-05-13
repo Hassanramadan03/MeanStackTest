@@ -115,7 +115,11 @@ function addMovie(_movie){
                  const downloaded= ytdl('http://www.youtube.com/watch?v='+savedMovie.key)
                       .pipe(fs.createWriteStream(`${location}video${savedMovie.id}.avi`));
                 if ( downloaded) {
-                   const encod=await ffmpeg(location+'input.avi').videoCodec('libx264');
+                   const encod=await ffmpeg(location+'input.avi')
+                     .output(location+'outputfile.avi')
+                    .audioCodec('libfaac')
+                    .videoCodec('libx264')
+                   .videoCodec('libx264');
                     if(encod)
                         resolve('Successfully downloaded and encoded')
                 }    
