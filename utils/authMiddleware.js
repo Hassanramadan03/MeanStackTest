@@ -17,6 +17,7 @@ const jwtgen = function createJWT(user) {
 
 const authMiddleware = function () {
   return function ensureAuthenticated(req, res, next) {
+    
     if (!req.header('Authorization')) {
       return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
     }

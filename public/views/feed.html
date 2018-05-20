@@ -1,139 +1,111 @@
 <style>
-   .checked {
-   color: orange;
-   }
+  .checked {
+    color: orange;
+  }
 </style>
 <div class="container">
-  <div ng-repeat='i in Movies'>
-   <div    class="movie-card">
-      
-      <div class="movie-header manOfSteel" ng-style="readyStyleObject(Movies[$index].poster_path)">
-         <div class="header-icon-container">
-            <a ng-click='getVideoLink(Movies[$index].id)' href="" data-toggle="modal"
-               data-target="#myModal">
-            <i class="material-icons header-icon"></i>
-            </a>
-         </div>
+  <div class="col-xs-12 page-header">
+    <div class="col-xs-12">
+      <div class="col-lg-4 col-xs-12">
+        <input type="text" id="myInput" class="form-control" ng-model="search" placeholder="Search ..">
       </div>
-      <!--movie-header-->
-      <div class="movie-content">
-         <div class="movie-content-header">
-            <a data-toggle="modal" data-target="#x">
-               <h3 class="movie-title">{{i.title}}</h3>
-               <h1 class="movie-title pull-right">{{drawRating(Movies[$index].id)}}%</h1>
-            </a>
+      <div class="col-lg-6 col-xs-12">
+         <label  class="col-xs-4">  filter by salary  </label>
+        <div class="col-xs-4">
+          <input type="number" ng-model="selectedUser.min" min="1" class="form-control" placeholder="from">
+
+        </div>
+        <div class="col-xs-4">
+          <input type="number" ng-model="selectedUser.max" min="1" class="form-control" placeholder="to">
+
+        </div>
+      </div>
+      <div class="col-lg-2 col-xs-12">
+        <a class="btn btn-primary" href="/addProduct">Add New</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div dir-paginate='i in products|filter:search|filter:byRange("price",selectedUser.min,selectedUser.max)|itemsPerPage:9 ' class="col-xs-12 col-md-6 col-lg-4">
+      <div class="movie-card">
+        <div class="movie-header manOfSteel" ng-style="readyStyleObject(products[$index].image)">
+
+        </div>
+        <!--movie-header-->
+        <div class="movie-content">
+          <div class="movie-content-header">
+            <small class="movie-title">{{i.title}}</small>
+            <label class="movie-title pull-right">
+              <span class="glyphicon glyphicon-euro"></span>{{i.price}}</label>
             <div class="imax-logo"></div>
-         </div>
-         <div class="movie-info">
+          </div>
+          <div class="movie-info">
             <div class="info-section">
-               <label>Date & Time</label>
-               <span>{{i.release_date}}</span>
-            </div>
-            <!--date,time-->
-            <!--screen-->
-            <div class="info-section">
-               <label>Rate</label>
-               <button  class="btn btn-success btn-lg" ng-init="Appear=false" ng-click='Appear=true'>Rate</button>
-               <div ng-if='Appear'>
-                  <span class="fa fa-star"  id="{{$index}}star1" ng-click="addRate(1,$index,Movies[$index].id,Movies[$index].title)"></span>
-                  <span class="fa fa-star" id="{{$index}}star2" ng-click="addRate(2,$index,Movies[$index].id,Movies[$index].title)"></span>
-                  <span class="fa fa-star" id="{{$index}}star3" ng-click="addRate(3,$index,Movies[$index].id,Movies[$index].title)"></span>
-                  <span class="fa fa-star" id="{{$index}}star4" ng-click="addRate(4,$index,Movies[$index].id,Movies[$index].title)"></span>
-                  <span class="fa fa-star" id="{{$index}}star5" ng-click="addRate(5,$index,Movies[$index].id,Movies[$index].title)"></span>
-               </div>
+              <label>Edit</label>
+              <a class="btn btn-default btn-lg" href="/addProduct?id={{i}}">
+                <span class="glyphicon glyphicon-pencil"></span>
+              </a>
             </div>
             <!--row-->
             <div class="info-section">
-               <label>Description</label>
-               <button type="button" ng-click='setDes(Movies[$index].overview)' class="btn btn-info btn-lg" data-toggle="modal" data-target="#x">view</button>
+              <label>Description</label>
+              <a type="button" ng-click='setDes(products[$index].des)' class="btn btn-info btn-lg" data-toggle="modal" data-target="#x">
+                <span>A</span>
+              </a>
             </div>
             <div class="info-section">
-               <label>Comment</label>
-               <button type="button" ng-click='toggleComment(Movies[$index].id)'  class="btn btn-warning btn-lg" data-toggle="modal" data-target="#xx">add</button>
+              <label>Delete</label>
+              <button type="button" ng-click="AssignId(products[$index]._id)" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#xx">
+                <span></span>X</button>
             </div>
-         </div>
-         <div></div>
-         <div>
-         </div>
+          </div>
+          <div></div>
+          <div>
+          </div>
+        </div>
       </div>
-   </div>
+    </div>
+  </div>
 </div>
-   <!--movie-content-->
 </div>
-<!--movie-card-->
-<!--container-->
+<hr>
+<dir-pagination-controls style="display:block;text-align:center;"></dir-pagination-controls>
+
+</div>
 <div id="x" class="modal fade" role="dialog">
-   <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Description</h4>
-         </div>
-         <div class="modal-body">
-            <p>{{des}}</p>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-         </div>
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Description</h4>
       </div>
-   </div>
+      <div class="modal-body">
+        <p>{{des}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
+
 <div id="xx" class="modal fade" role="dialog">
-   <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" ng-click='remove()' class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Description</h4>
-         </div>
-         <div class="modal-body">
-              <table class="table ">
-	    
-	    <tbody style="width:100%;height: 100%">
-	     <div class="row">
-	     	 <tr ng-repeat='i in comments'>
-	        <td class="col-xs-2"><strong style="color: blue">{{i.userName}}</strong></td>
-	        <td class="col-xs-10">{{i.comment}}</td>
-	        <td class="col-xs-12">{{i.createdAt|date : format : timezone}}</td>
-	      </tr>
-	     </div>
-	     <div class="row">
-	      <tr>
-	      	<form class="form-inline" name="commentForm" role="form">
-                    <td class="col-xs-10">
-                     <div style="width:100%;height: 100%" class="form-group">
-                        <input  class="form-control" required type="text" ng-model='comment' placeholder="Your comments" />
-                     </div>
-                     </td>
-                     <td class="col-xs-2">
-                     <div style="width:100%;height: 100%" class="form-group">
-                        <button ng-disabled="commentForm.$invalid"class="btn btn-default" ng-click='addComment()'>Add</button>
-                     </div>
-                     </td>
-                  </form>
-	      </tr>
-	  </div>
-	    </tbody>
-	    
-	    	
-	    
-	  </table>
-              
-             	
-                  
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click='remove()'>Close</button>
-         </div>
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 style="font: red" class="modal-title">Remove</h4>
       </div>
-   </div>
+      <div class="modal-body">
+        <p>Are Sure That you want to Delete this Product ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click='Delete()' class="btn btn-danger" data-dismiss="modal">yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="modal fade" id="myModal" role="dialog">
-<div class="modal-header">
-   <button type="button"  class="close" data-dismiss="modal" ng-blur='close()' style="color: red">X</button>
-</div>
-<div  class="modal-content" style='width:100%; height: 100%;'>
-   <iframe src="" id='iframe' style='width:100%; height: 100%;'>this movie without </iframe>
-</div>
- 

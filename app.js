@@ -11,7 +11,7 @@ var path = require('path') ,
     app = express();
     app.locals.moment=require('moment');
  
-    var middleware = require('./models/AuthMiddleWare');
+    var middleware = require('./utils/AuthMiddleWare');
     var ensureAuthenticated = middleware.authMiddleware;
    
 mongoose.connect('mongodb://localhost:27017/testNode');
@@ -23,7 +23,7 @@ mongoose.connect('mongodb://localhost:27017/testNode');
 
 //routing files
 const auth = require('./business-modules/auth/auth_router');
-const movie = require('./business-modules/movie/movie_router');
+const product = require('./business-modules/product/product_router');
 
 app.set('port', (process.env.PORT || 8000));
 
@@ -63,7 +63,10 @@ if (app.get('env') === 'production') {
 //     next();
 //   });
 app.use('/auth',auth);
-app.use('/movie',ensureAuthenticated(),movie);
+// app.use('/product',   product);
+app.use('/product',ensureAuthenticated(),product);
+
+ 
 
 app.use('/', express.static('public'));
 app.use('*', express.static('public'));

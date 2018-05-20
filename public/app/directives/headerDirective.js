@@ -7,7 +7,7 @@
         return {
             templateUrl: '/views/header.html',
             controller: headerController,
-            controllerAs: 'headerTempl'
+            restrict:'E'
         }
     }
     function headerController($scope, $location,$auth) {

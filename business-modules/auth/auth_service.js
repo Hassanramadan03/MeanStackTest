@@ -1,16 +1,15 @@
 const SuccessMessage = require('../../utils/customMessage').SuccessMessage;
 const ErrorMessage = require('../../utils/customMessage').ErrorMessage;
 const User = require('../../models/user');
-const Profile = require('../../models/profile');
-const generateHash = require('../../models/utlis').generateHash;
-const validPassword = require('../../models/utlis').validPassword;
-const creatJwt = require('../../models/utlis').createJWT;
+const generateHash = require('../../utils/utlis').generateHash;
+const validPassword = require('../../utils/utlis').validPassword;
+const creatJwt = require('../../utils/utlis').createJWT;
 const mailer_service = require('./nodemailer_service');
 
 module.exports = {
     register,
     signin,
-    
+
 }
 function register(_user) {
     const Ouser = new User({
@@ -29,24 +28,10 @@ function register(_user) {
                 resolve({ "success": false, message: 'Email Is Already Existed...!' });
             } else {
                 const _createdUser = await Ouser.save();
-                if (_createdUser) {
-                    const _userProfile = new Profile({
-                        firstname: _createdUser.local.firstname,
-                        lastname: _createdUser.local.lastname,
-                        email: _createdUser.local.email.toLowerCase(),
-                        userId: _createdUser._id
-                    })
-                    const createProfile = await _userProfile.save();
-                    const verfiedEmail  = await mailer_service.sendMail(_createdUser.local.email, creatJwt(_createdUser));
-                     
-                    if (createProfile)
-                    resolve({ "success": true, type: _createdUser.type, userId: _createdUser._id, user: { firstname: _createdUser.local.firstname, lastname: _createdUser.local.lastname, avatar: _createdUser.local.avatar } });
-                } else {
-                    resolve({ "success": false, message: 'Registration failed...!' });
-                }
-
+                const verfiedEmail = await mailer_service.sendMail(_createdUser.local.email, creatJwt(_createdUser));
+                if (_createdUser) resolve({ "success": true, type: _createdUser.type, userId: _createdUser._id, user: { firstname: _createdUser.local.firstname, lastname: _createdUser.local.lastname, avatar: _createdUser.local.avatar } });
+                else resolve({ "success": false, message: 'Registration failed...!' });
             }
-
         } catch (error) {
             console.log(error)
             reject(error);
@@ -71,4 +56,3 @@ async function signin(_user) {
         }
     })
 }
- 

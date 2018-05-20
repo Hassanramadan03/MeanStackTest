@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer'),
-    creatJwt = require('../../models/utlis').createJWT;
+    creatJwt = require('../../utils/utlis').createJWT;
 module.exports = {
     sendMail
 }

@@ -1,7 +1,7 @@
 'use strict';
 // Declare app level module which depends on filters, and services
 // angular.module('app', ["auth0","angular-storage","angular-jwt","ngMaterial","ngRoute"])
-angular.module('app', ['satellizer',"ngRoute"])
+angular.module('app', ['satellizer', "ngRoute",'angularUtils.directives.dirPagination'])
 .config( function( $routeProvider,$authProvider, $locationProvider) {
       
     var skipIfLoggedIn = ['$q', '$auth', function($q, $auth) {
@@ -44,23 +44,17 @@ angular.module('app', ['satellizer',"ngRoute"])
         resolve: {
             loginRequired: loginRequired
           }
-        
-        
-    }). 
-    when('/feed',{
-        templateUrl:'/views/feed.html',
-        controller:'feedCtrl'
-        
     }).
-     when('/movie',{
-        templateUrl:'/views/movieInfo.html',
-        controller:'infoCtrl' ,
+      when('/addProduct', {
+        templateUrl: '/views/addProduct.html',
+        controller: 'addProductCtrl',
         resolve: {
-            loginRequired: loginRequired
-          }
-        
-    }).when('/video',{
-        templateUrl:'/views/video.html',
+          loginRequired: loginRequired
+        }
+      }).
+     when('/product',{
+        templateUrl:'/views/product.html',
+        controller:'productCtrl' ,
         resolve: {
             loginRequired: loginRequired
           }
