@@ -12,12 +12,12 @@ module.exports = {
     removeProduct,
     updateProduct
 }
-  
-    
+
+
 async function addProduct(req, res) {
     try {
-        
-        
+
+
         upload(req, res, async function (err) {
             if (err) {
                 console.log(err);
@@ -29,13 +29,13 @@ async function addProduct(req, res) {
                 renderResponseUtil.sendResponse(req, res, getProducts)
             }
         });
-        
-        
+
+
     } catch (error) {
         res.send(error);
     }
-}       
- 
+}
+
 
 async function getProducts(req, res) {
     try {
@@ -48,28 +48,34 @@ async function getProducts(req, res) {
 
 async function removeProduct(req, res) {
     try {
-        
+
         const removedProduct = await product_service.removeProduct(req.param('id'));
         renderResponseUtil.sendResponse(req, res, removedProduct)
     } catch (error) {
         res.send(error);
     }
-} 
+}
 async function updateProduct(req, res) {
     try {
-        
+
         upload(req, res, async function (err) {
             if (err) {
                 console.log(err);
                 return res.end("Error uploading file.");
             } else {
                 const product = JSON.parse(req.param('id'));
-                product.image = req.files[0].filename;
-                const updatedProduct = await product_service.updateProduct(product._id, product);
-                renderResponseUtil.sendResponse(req, res, updatedProduct)
+                if (req.files[0]) {
+                    product.image = req.files[0].filename;
+                    const updatedProduct = await product_service.updateProduct(product._id, product);
+                    renderResponseUtil.sendResponse(req, res, updatedProduct)
+                }else{
+                    const updatedProduct = await product_service.updateProduct(product._id, product);
+                    renderResponseUtil.sendResponse(req, res, updatedProduct)
+                }
+               
             }
         });
-        
+
     } catch (error) {
         res.send(error);
     }
