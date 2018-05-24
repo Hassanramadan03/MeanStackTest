@@ -69,6 +69,7 @@ app.use('/product',ensureAuthenticated(),product);
  
 
 app.use('/', express.static('public'));
+app.use('/public/uploadimages', express.static('public/uploadimage'))
 app.use('*', express.static('public'));
 // app.use(function(req,res,next){
 //     if(req.url!==('/propertyInfo'||'/addProperty'||'/profile'||'/advancedSearch'||'/applyRequest'))

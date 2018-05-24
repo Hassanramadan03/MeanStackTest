@@ -24,13 +24,18 @@ async function addProduct(req, res) {
                 return res.end("Error uploading file.");
             } else {
                 const product = JSON.parse(req.param('id'));
-                product.image = req.files[0].filename;
-                const getProducts = await product_service.addProduct(product);
-                renderResponseUtil.sendResponse(req, res, getProducts)
+                if (req.files[0]) {
+                    product.image = req.files[0].filename;
+                    const getProducts = await product_service.addProduct(product);
+                    renderResponseUtil.sendResponse(req, res, getProducts)
+                } else {
+                    const getProducts = await product_service.addProduct(product);
+                    renderResponseUtil.sendResponse(req, res, getProducts)
+                }
             }
         });
 
-
+        
     } catch (error) {
         res.send(error);
     }

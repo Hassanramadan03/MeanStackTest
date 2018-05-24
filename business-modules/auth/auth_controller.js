@@ -8,17 +8,21 @@ module.exports = {
 }
 async function signup(req, res) {
     try {
+         
+      if(req.body){  
         const Sign_up = await auth_service.register(req.body);
         renderResponseUtil.sendResponse(req, res, Sign_up)
+    }else{
+          renderResponseUtil.sendResponse(req, res, 'there is no body')
+    }
     } catch (error) {
         res.send(error);
     }
 }
 async function signin(req, res,next) {
-        
     try {
-        const Sign_up = await auth_service.signin(req.body);
-        renderResponseUtil.sendResponse(req, res, Sign_up)
+        const Sign_in = await auth_service.signin(req.body);
+        renderResponseUtil.sendResponse(req, res, Sign_in)
     } catch (error) {
         res.send(error);
     }
